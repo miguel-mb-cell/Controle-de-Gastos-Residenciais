@@ -96,7 +96,7 @@ Caso não queira criar um usuário, pode fazer o Sign in com: ```miguelmbastos75
 Mas caso queira testar a funcionalidade de criar um usuário, basta clicar em "Entrar":
 ![alt text](image.png)
 
-Clique em "Sign up", caso ainda não esteja na página:
+Clique em "Sign up":
 ![alt text](image-1.png)
 
 Após preencher os dados, clique no link de confirmação enviado para o seu e-mail:
