@@ -91,7 +91,9 @@ Aqui está a explicação de como o projeto foi desenvolvido:
 
 
 ## 🚀 Como usar a aplicação
-Primeiramente, é necessário logar na aplicação. Basta clicar em "Entrar":
+Caso não queira criar um usuário, pode fazer o Sign in com: ```miguelmbastos75@gmail.com``` e ```Avatar10.```
+
+Mas caso queira testar a funcionalidade de criar um usuário, basta clicar em "Entrar":
 ![alt text](image.png)
 
 Clique em "Sign up", caso ainda não esteja na página:
