@@ -26,18 +26,14 @@ export default function Pessoas() {
 
     const handleDelete = async (id: string) => {
         try {
-          // Chamada para excluir a pessoa do banco de dados
           const { error } = await supabase.from("pessoas").delete().eq("id", id);
     
           if (error) throw error;
     
-          // Atualizando a lista de pessoas após a exclusão
           setPessoas((prevPessoas) => prevPessoas.filter((pessoa) => pessoa.id !== id));
     
-          // Exibindo uma mensagem de sucesso
           toast.success("Pessoa excluída com sucesso");
         } catch (error) {
-          // Caso ocorra algum erro
           toast.error("Falha ao excluir pessoa");
         }
     };
@@ -48,7 +44,6 @@ export default function Pessoas() {
             return;
         }
         
-        // Garantir que idade seja um número
         const idadeNumber = typeof idade === 'string' ? Number(idade) : idade;
 
         const { data: { user } } = await supabase.auth.getUser()
@@ -59,7 +54,6 @@ export default function Pessoas() {
         }
         try {
             if (user) {
-                // Insere a nova pessoa no banco de dados
                 const { error: insertError } = await supabase
                     .from("pessoas")
                     .insert({
@@ -67,27 +61,24 @@ export default function Pessoas() {
                         nome: nome,
                         usuario_id: user.id
                     })
-                    .single();  // Para garantir que o retorno seja um único item
+                    .single();
         
-                // Se ocorrer algum erro durante a inserção
                 if (insertError) {
                     console.error("Erro ao inserir pessoa:", insertError);
                     throw insertError;
                 }
         
-                // Agora, recupera a última inserção (última pessoa com base no created_at)
                 const { data: lastInsertedData, error: fetchError } = await supabase
                     .from("pessoas")
                     .select("*")
-                    .order("created_at", { ascending: false })  // Ordena em ordem decrescente pela data
-                    .limit(1);  // Limita a 1 item (o mais recente)
+                    .order("created_at", { ascending: false })
+                    .limit(1);
         
                 if (fetchError) {
                     console.error("Erro ao buscar última pessoa:", fetchError);
                     throw fetchError;
                 }
         
-                // Atualiza o estado com a última inserção
                 if (lastInsertedData && lastInsertedData.length > 0) {
                     setPessoas((prevPessoas) => [
                         ...prevPessoas,
@@ -95,7 +86,6 @@ export default function Pessoas() {
                     ]);
                 }
         
-                // Fecha o modal e exibe a mensagem de sucesso
                 setIsModalOpen(false);
                 toast.success("Pessoa adicionada com sucesso");
         

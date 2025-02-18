@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { supabase } from "@/integrations/supabase/client";
 import { Database } from '../integrations/supabase/types';
 
-// Tipos das tabelas do banco de dados
 type Pessoa = Database['public']['Tables']['pessoas']['Row'];
 type Transacao = Database['public']['Tables']['transacoes']['Row'];
 
@@ -11,7 +10,6 @@ export default function Index() {
   const [transacoes, setTransacoes] = useState<Transacao[]>([]);
 
   useEffect(() => {
-    // Buscar as pessoas
     const fetchPessoas = async () => {
       const { data: pessoasData, error: pessoasError } = await supabase
         .from('pessoas')
@@ -24,7 +22,6 @@ export default function Index() {
       }
     };
 
-    // Buscar as transações
     const fetchTransacoes = async () => {
       const { data: transacoesData, error: transacoesError } = await supabase
         .from('transacoes')
@@ -41,7 +38,6 @@ export default function Index() {
     fetchTransacoes();
   }, []);
 
-  // Cálculos dos totais
   const totalReceitas = transacoes
     .filter((transacao) => transacao.tipo === 'Receita')
     .reduce((acc, transacao) => acc + transacao.quantia, 0);
@@ -52,7 +48,6 @@ export default function Index() {
 
   const saldoGeral = totalReceitas - totalDespesas;
 
-  // Cálculo das receitas, despesas e saldo por pessoa
   const pessoasComTotais = pessoas.map((pessoa) => {
     const transacoesPessoa = transacoes.filter(
       (transacao) => transacao.pessoa_id === pessoa.id

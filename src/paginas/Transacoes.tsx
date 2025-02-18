@@ -21,7 +21,7 @@ export default function Transacoes() {
   const [quantia, setQuantia] = useState<number | string>('');
   const [tipo, setTipo] = useState('');
   const [pessoaID, setPessoaID] = useState('');
-  const [pessoas, setPessoas] = useState<{ id: string; nome: string }[]>([]);
+  const [pessoas, setPessoas] = useState<{ id: string; nome: string; idade: number }[]>([]);
 
   useEffect(() => {
     const fetchTransacoes = async () => {
@@ -39,7 +39,7 @@ export default function Transacoes() {
     
       const { data, error } = await supabase
         .from('pessoas')
-        .select('id, nome')
+        .select('id, nome, idade')
         .eq('usuario_id', authData.user.id);
     
       if (error) {
@@ -56,18 +56,14 @@ export default function Transacoes() {
 
   const handleDelete = async (id: string) => {
     try {
-      // Chamada para excluir a pessoa do banco de dados
       const { error } = await supabase.from("transacoes").delete().eq("id", id);
 
       if (error) throw error;
 
-      // Atualizando a lista de pessoas após a exclusão
       setTransacoes((prevTransacoes) => prevTransacoes.filter((transacoes) => transacoes.id !== id));
 
-      // Exibindo uma mensagem de sucesso
       toast.success("Transação excluída com sucesso");
     } catch (error) {
-      // Caso ocorra algum erro
       toast.error("Falha ao excluir transação");
     }
 };
@@ -78,7 +74,6 @@ const handleAddTransacao = async () => {
       return;
   }
 
-  // Converter quantia para número
   const quantiaNumber = typeof quantia === "string" ? Number(quantia) : quantia;
 
   if (isNaN(quantiaNumber)) {
@@ -91,7 +86,6 @@ const handleAddTransacao = async () => {
   try {
 
       if (user) {
-        // Inserir a transação com o ID da pessoa encontrada
         const { error: insertError } = await supabase
         .from("transacoes")
         .insert({
@@ -100,26 +94,24 @@ const handleAddTransacao = async () => {
             descricao: descricao,
             pessoa_id: pessoaID,
         })
-        .single(); // Retorna os dados da transação inserida  
+        .single();
 
         if (insertError) {
           console.error("Erro ao inserir transação:", insertError);
           throw insertError;
         }
 
-        // Agora, recupera a última inserção (última pessoa com base no created_at)
         const { data: lastInsertedData, error: fetchError } = await supabase
         .from("transacoes")
         .select("*")
-        .order("created_at", { ascending: false })  // Ordena em ordem decrescente pela data
-        .limit(1);  // Limita a 1 item (o mais recente)
+        .order("created_at", { ascending: false })
+        .limit(1);
 
         if (fetchError) {
             console.error("Erro ao buscar última transacao:", fetchError);
             throw fetchError;
         }
 
-        // Atualiza o estado com a última inserção
         if (lastInsertedData && lastInsertedData.length > 0) {
             setTransacoes((prevTransacoes) => [
                 ...prevTransacoes,
@@ -127,7 +119,6 @@ const handleAddTransacao = async () => {
             ]);
         }
 
-        // Fecha o modal e exibe a mensagem de sucesso
         setIsModalOpen(false);
         toast.success("Transação adicionada com sucesso");
       }
@@ -178,10 +169,22 @@ return (
                         <SelectValue placeholder="Selecione um tipo" />
                       </SelectTrigger>
                       <SelectContent className="bg-gray-800 text-white border border-gray-600 rounded">
-                        <SelectGroup>
-                          <SelectItem value="Despesa">Despesa</SelectItem>
-                          <SelectItem value="Receita">Receita</SelectItem>
-                        </SelectGroup>
+                      <SelectGroup>
+                        {(() => {
+                          const pessoa = pessoas.find(p => p.id === pessoaID);
+                          if (pessoa) {
+                            return pessoa.idade < 18 ? (
+                              <SelectItem value="Despesa">Despesa</SelectItem>
+                            ) : (
+                              <>
+                                <SelectItem value="Despesa">Despesa</SelectItem>
+                                <SelectItem value="Receita">Receita</SelectItem>
+                              </>
+                            );
+                          }
+                          return null;
+                        })()}
+                      </SelectGroup>
                       </SelectContent>
                     </Select>
                   </div>

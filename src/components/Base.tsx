@@ -83,13 +83,13 @@ const Layout = ({ children }: LayoutProps) => {
                   {session.user?.email}
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="bg-gray-800 text-white border border-gray-600 rounded">
-                <DropdownMenuItem onClick={handleSignOut}>Sign out</DropdownMenuItem>
+              <DropdownMenuContent align="end" className="sign-out bg-gray-800 text-white border border-gray-600 rounded">
+                <DropdownMenuItem className="sign-out" onClick={handleSignOut}>Sair</DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           ) : (
             <Button variant="ghost" asChild>
-              <NavLink to="/autenticacao">Sign In</NavLink>
+              <NavLink to="/autenticacao">Entrar</NavLink>
             </Button>
           )}
         </div>

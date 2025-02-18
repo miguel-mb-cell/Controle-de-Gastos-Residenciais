@@ -1,6 +1,20 @@
-# Controle de Gastos Residenciais
+# 📈 Controle de Gastos Residenciais
+<img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Hand%20gestures/Waving%20Hand.png" alt="Waving Hand" width="20" height="20" /> Olá! Bem vindo ao meu projeto de controle de gastos residenciais. 
+![alt text](image-3.png)
 
-## Como foi feito
+## ⚙️ Tech Stack
+
+<br>
+
+<div>
+    <img src="https://skillicons.dev/icons?i=ts"><br>
+    <img src="https://skillicons.dev/icons?i=js,tailwindcss,react"><br>
+    <img src="https://skillicons.dev/icons?i=supabase,postgres,vite,css">
+</div>
+
+
+
+## 🛠️ Como foi feito
 Primeiro, defini que queria que os dados fossem persistentes. Então, criei um projeto no Supabase, que é uma plataforma open-source para projetos de banco de dados em PostgreSQL. Depois, defini que queria que cada usuário tivesse seus próprios dados, sendo necessário então uma autenticação para o usuário. 
 
 Aqui está a explicação de como o projeto foi desenvolvido:
@@ -49,12 +63,46 @@ Aqui está a explicação de como o projeto foi desenvolvido:
 
     Também usei a documentação em https://supabase.com/docs/guides/auth/auth-helpers/auth-ui para remover as opções padrão de autenticação que vem com o Auth UI, que são Goolge, Azuer e Github, pois não achei necessário aprofundar em mais configurações, já que a autenticação já funciona com e-mail e senha.
 
-6. Para operações select e delet, usei a documentação [JavaScript Client Library](https://supabase.com/docs/reference/javascript/introduction)
+6. Para operações select, insert e delete, usei a documentação [JavaScript Client Library](https://supabase.com/docs/reference/javascript/introduction)
 
-7. Quando todas as funcionalidades estavam prontas, alterei a estética do front end
-    
+    Select: 
+    ```
+    const { data, error } = await supabase
+    .from('characters')
+    .select()
+    ```
 
-## Referências
+    Insert: 
+    ```
+    const { error } = await supabase
+    .from('countries')
+    .insert({ id: 1, name: 'Mordor' })
+    ```
+
+    Delete: 
+    ```
+    const response = await supabase
+    .from('countries')
+    .delete()
+    .eq('id', 1)
+    ```
+
+7. Quando todas as funcionalidades estavam prontas, alterei a estética do front end.
+
+
+## 🚀 Como usar a aplicação
+Primeiramente, é necessário logar na aplicação. Basta clicar em "Entrar":
+![alt text](image.png)
+
+Clique em "Sign up", caso ainda não esteja na página:
+![alt text](image-1.png)
+
+Após preencher os dados, clique no link de confirmação enviado para o seu e-mail:
+![alt text](image-2.png)
+
+Após confirmar o e-mail, um usuário será criado no banco de dados na Supabase e as alterações feitas no banco de dados em sua conta irão afetar apenas seu usuário.
+
+## 📚 Referências
 
 - [Comandos vite para criar projeto com templates](https://vite.dev/guide/)
 - [Best Practices for Structuring a React TypeScript Project](https://thiraphat-ps-dev.medium.com/best-practices-for-structuring-a-react-typescript-project-f5ee7f9a264e)
